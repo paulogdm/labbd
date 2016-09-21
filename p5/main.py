@@ -1,6 +1,11 @@
 from kivy.app import App
 from kivy.properties import StringProperty
 from kivy.uix.screenmanager import ScreenManager, Screen, SlideTransition
+from kivy.uix.popup import Popup
+from kivy.uix.textinput import TextInput
+from kivy.uix.label import Label
+from kivy.uix.boxlayout import BoxLayout
+
 import os
 import cx_Oracle
 
@@ -13,23 +18,27 @@ class Login(Screen):
 
 		app = App.get_running_app()
 
-		app.username = loginText
+		self.user = app.username = loginText
 		app.password = passwordText
 
 		try:
 			self.oracledb = DBApi(app.username, app.password)
-		
+			print('[INFO] user "%s" is connected' % app.username)
+			
+			self.manager.transition = SlideTransition(direction="left")
+			self.manager.current = 'MainApp'
+
+			app.config.read(app.get_application_config())
+			app.config.write()
+
 		except cx_Oracle.DatabaseError as e:
+			
+			print('[INFO] invalid credentials or database')
+
 			error, = e.args
-
-
-		self.manager.transition = SlideTransition(direction="left")
-		self.manager.current = 'MainApp'
-
-		app.config.read(app.get_application_config())
-		app.config.write()
-
+			
 	def disconnect(self):
+		print('[INFO] user "%s" disconnected' % self.user)
 		self.oracledb.disconnect()
 
 	def resetForm(self):

@@ -1,11 +1,16 @@
 <MainApp>:
-    BoxLayout:
-        orientation: 'vertical'
+	BoxLayout:
+		orientation: 'vertical'
 
-        Label:
-            text: "You are now connected"
-            font_size: 32
-        Button:
-            text: "Disconnect"
-            font_size: 24
-            on_press: root.disconnect()
+		Label:
+			text: "You are now connected"
+			font_size: 32
+
+		DropDown:
+			id: dropdown
+			on_parent: self.dismiss()
+
+		Button:
+			text: "Disconnect"
+			font_size: 24
+			on_press: root.disconnect()
